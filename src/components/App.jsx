@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
+import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
@@ -27,15 +28,28 @@ export class App extends Component {
           }
     );
   };
-
   handleSubmit = e => {
     e.preventDefault();
-this.setState((prevState)=>{prevState.contacts.push({name:'FARR'})})
-
-  }
+    let contacts = this.state.contacts;
+    this.setState({
+      contacts: [
+        ...contacts,
+        { id: nanoid(), name: this.state.name, number: this.state.number },
+      ],
+    });
+  };
+  deletePerson = e => {
+    this.state.contacts.map(contact => {
+      if (contact.id === e.target.id) {
+        let index = this.state.contacts.indexOf(contact);
+        let cloneOfContacts = [...this.state.contacts];
+        cloneOfContacts.splice(index, 1);
+        this.setState({ contacts: cloneOfContacts });
+      }
+    });
+  };
 
   render() {
-    console.log(this.state)
     return (
       <div
         style={{
@@ -46,10 +60,16 @@ this.setState((prevState)=>{prevState.contacts.push({name:'FARR'})})
         }}
       >
         <h1>Phonebook</h1>
-        <ContactForm handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+        <ContactForm
+          handleChange={this.handleChange}
+          handleSubmit={this.handleSubmit}
+        />
         <h2>Contacts</h2>
         <Filter />
-        <ContactList />
+        <ContactList
+          deleteFnc={this.deletePerson}
+          contacts={this.state.contacts}
+        />
       </div>
     );
   }
