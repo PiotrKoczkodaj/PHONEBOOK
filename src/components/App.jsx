@@ -49,22 +49,18 @@ export class App extends Component {
     });
   };
   filterFnc = (e) => {
-    this.setState(prevState => {
-      prevState.filter = e.target.value
-    })
-    
     let b = [...this.state.contacts].map(contact => {
-      console.log(contact.name.toUpperCase().includes(this.state.filter.toUpperCase())) 
+      
       let arr = [];
-      if (contact.name.toUpperCase().includes(this.state.filter.toUpperCase())) {
-       return contact
+      if (contact.name.toUpperCase().includes(e.target.value.toUpperCase())) {
+        arr.push({ contact });
+      } else {
+        return null
       }
      
     })
-    console.log(b)
-  //   let a = this.state.contacts.map(contact => {
-  // return contact.name.includes(this.state.filter)
-  //   })
+    
+   
     // this.setState({contacts:b})
     }
  
